@@ -1,0 +1,33 @@
+{
+  "name": "eve-commerce",
+  "version": "1.0.0",
+  "main": "start.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cookie-parser": "^1.4.3",
+    "crypto-random-string": "^1.0.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "react": "^16.4.2",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-node-modules": "^0.0.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "nodemon": "^1.18.4",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "test": "jest test",
+    "build": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./build",
+    "watch": "watch \"yarn build\" src",
+    "watch:server": "nodemon -w ./build --ext js,json,jsx"
+  },
+  "author": "Adam",
+  "license": "ISC",
+  "description": ""
+}
