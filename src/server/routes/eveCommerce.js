@@ -1,6 +1,8 @@
 import express from 'express';
 import authCheck from '../middleware/authCheck';
-import authorise from '../middleware/authorise';
+import makeEsiTokenRequest from '../middleware/makeEsiTokenRequest';
+import esiAccessResponseHandler from '../middleware/esiAccessResponseHandler';
+import setEsiCookie from '../middleware/setEsiCookie';
 
 const router = express.Router();
 
@@ -14,9 +16,10 @@ router.get(
 
 router.get(
     '/callback',
-    authorise,
+    makeEsiTokenRequest,
+    setEsiCookie,
     function (req, res, next) {
-        res.send('Welcome Back!');
+        res.redirect('/');
     }
 );
 
