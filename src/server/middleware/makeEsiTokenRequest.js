@@ -6,10 +6,11 @@ export default async function (request, response, next) {
 
     const esiAccessResponse = await getEsiAccessToken(authCode);
 
-    const {encryptedToken, tokenExpiry} = esiAccessResponseHandler(esiAccessResponse.data);
+    const {encryptedAccessToken, accessTokenExpiry, encryptedRefreshToken} = esiAccessResponseHandler(esiAccessResponse.data);
 
-    response.locals.encryptedToken = encryptedToken;
-    response.locals.tokenExpiry = tokenExpiry;
+    response.locals.encryptedAccessToken = encryptedAccessToken;
+    response.locals.accessTokenExpiry = accessTokenExpiry;
+    response.locals.encryptedRefreshToken = encryptedRefreshToken;
         
     next();
 }

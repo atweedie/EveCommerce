@@ -1,13 +1,18 @@
 import express from 'express';
 import authCheck from '../middleware/authCheck';
 import makeEsiTokenRequest from '../middleware/makeEsiTokenRequest';
-import esiAccessResponseHandler from '../middleware/esiAccessResponseHandler';
 import setEsiCookie from '../middleware/setEsiCookie';
+import renderHomepage from '../middleware/renderHomepage';
 
 const router = express.Router();
 
 router.get(
-    '/', 
+    '/',
+    renderHomepage
+);
+
+router.get(
+    '/auth', 
     authCheck,
     function (req, res, next) {
         res.send('Authorised');

@@ -23,7 +23,7 @@
   "scripts": {
     "start": "node start.js",
     "test": "jest test",
-    "build": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./build",
+    "build": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./build --copy-files",
     "watch": "watch \"yarn build\" src",
     "watch:server": "nodemon -w ./build --ext js,json,jsx"
   },
