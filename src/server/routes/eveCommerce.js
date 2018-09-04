@@ -11,8 +11,8 @@ router.get(
     '/',
     authCheck,
     makeCharacterInfoRequest,
-    function (req, res, next) {
-        res.render('home');
+    function (request, response, next) {
+        response.render('home');
     }
 );
 
@@ -25,8 +25,8 @@ router.get(
     '/esi',
     makeEsiTokenRequest,
     setEsiCookie,
-    function (req, res, next) {
-        res.redirect('/');
+    function (request, response, next) {
+        response.redirect('/');
     }
 );
 
