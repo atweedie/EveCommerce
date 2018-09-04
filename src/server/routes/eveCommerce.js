@@ -2,25 +2,27 @@ import express from 'express';
 import authCheck from '../middleware/authCheck';
 import makeEsiTokenRequest from '../middleware/makeEsiTokenRequest';
 import setEsiCookie from '../middleware/setEsiCookie';
-import renderHomepage from '../middleware/renderHomepage';
+import redirectEveSso from '../middleware/redirectEveSso';
+import makeCharacterInfoRequest from '../middleware/makeCharacterInfoRequest'
 
 const router = express.Router();
 
 router.get(
     '/',
-    renderHomepage
-);
-
-router.get(
-    '/auth', 
     authCheck,
+    makeCharacterInfoRequest,
     function (req, res, next) {
-        res.send('Authorised');
+        res.render('home');
     }
 );
 
 router.get(
-    '/callback',
+    '/auth',
+    redirectEveSso
+);
+
+router.get(
+    '/esi',
     makeEsiTokenRequest,
     setEsiCookie,
     function (req, res, next) {

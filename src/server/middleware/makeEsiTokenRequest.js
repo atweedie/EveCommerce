@@ -1,16 +1,36 @@
+import crypto from 'crypto';
+import logger from '../logger';
+import config from '../../../config/local';
 import getEsiAccessToken from '../services/getEsiAccessToken';
 import esiAccessResponseHandler from '../services/esiAccessResponseHandler';
 
 export default async function (request, response, next) {
-    const authCode = request.query.code;
+    let token = request.query.code || request.cookies['esi_rtkn'];
 
-    const esiAccessResponse = await getEsiAccessToken(authCode);
+    const isRefresh = Object.prototype.hasOwnProperty.call(request.cookies, 'esi_rtkn')
 
-    const {encryptedAccessToken, accessTokenExpiry, encryptedRefreshToken} = esiAccessResponseHandler(esiAccessResponse.data);
+    if (isRefresh) {
+        const secret = config.secretKey;
+        const refreshKey = crypto.createDecipher('aes192', secret);
 
-    response.locals.encryptedAccessToken = encryptedAccessToken;
-    response.locals.accessTokenExpiry = accessTokenExpiry;
-    response.locals.encryptedRefreshToken = encryptedRefreshToken;
-        
-    next();
+        token = refreshKey.update(token, 'hex', 'utf8');
+        token += refreshKey.final('utf8');
+    }
+
+    logger.info(token);
+
+    try {
+        const esiAccessResponse = await getEsiAccessToken(token, {'isRefresh': isRefresh});
+
+        const {encryptedAccessToken, accessTokenExpiry, encryptedRefreshToken} = esiAccessResponseHandler(esiAccessResponse.data);
+
+        response.locals.encryptedAccessToken = encryptedAccessToken;
+        response.locals.accessTokenExpiry = accessTokenExpiry;
+        response.locals.encryptedRefreshToken = encryptedRefreshToken;
+
+        next();
+    } catch(error) {
+        logger.error(error.response.data);
+        next(error);
+    }
 }

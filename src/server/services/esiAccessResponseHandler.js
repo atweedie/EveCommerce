@@ -1,18 +1,21 @@
 import crypto from 'crypto';
-import * as config from '../../../config/local';
+import config from '../../../config/local';
 
 export default function(esiAccessResponse) {
 
     const secret = config.secretKey
-    const encryptedAccessToken = crypto.createHmac('sha256', secret)
-        .update(esiAccessResponse['access_token'])
-        .digest('hex');
+
+    const accessKey = crypto.createCipher('aes192', secret);
+
+    let encryptedAccessToken = accessKey.update(esiAccessResponse['access_token'], 'utf8', 'hex');
+    encryptedAccessToken += accessKey.final('hex');
 
     const accessTokenExpiry = new Date(Date.now() + (esiAccessResponse['expires_in'] * 1000));
 
-    const encryptedRefreshToken = crypto.createHmac('sha256', secret)
-    .update(esiAccessResponse['refresh_token'])
-    .digest('hex');
+    const refreshKey = crypto.createCipher('aes192', secret);
+
+    let encryptedRefreshToken = refreshKey.update(esiAccessResponse['refresh_token'], 'utf8', 'hex');
+    encryptedRefreshToken += refreshKey.final('hex');
 
     return {
         encryptedAccessToken,
