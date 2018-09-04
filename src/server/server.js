@@ -3,11 +3,11 @@ import path from 'path';
 import cookieParsrer from 'cookie-parser';
 import router from './routes/eveCommerce';
 
-const viewsDirectory = path.join(__dirname, '../app/views');
+const viewsDirectory = path.join(__dirname, '../app/templates');
 
 const app = express();
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 app.set('views', viewsDirectory)
 
 app.use(cookieParsrer())

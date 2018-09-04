@@ -12,13 +12,11 @@ export default async function (request, response, next) {
     let accessToken = accessTokenCipher.update(encryptedAccessToken, 'hex', 'utf8');
     accessToken += accessTokenCipher.final('utf8');
 
-    logger.info('Requesting Character Info');
-
     const esiCharacterInfo = await getCharacterInfo(accessToken);
 
-    logger.info(esiCharacterInfo.data);
+    response.locals.character = esiCharacterInfo.data;
 
-    Object.assign(esiCharacterInfo.data, response.locals);
+    logger.info(response.locals);
 
     next();
 }
