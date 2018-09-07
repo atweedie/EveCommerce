@@ -17,8 +17,6 @@ export default async function (request, response, next) {
         token += refreshKey.final('utf8');
     }
 
-    logger.info(token);
-
     try {
         const esiAccessResponse = await getEsiAccessToken(token, {'isRefresh': isRefresh});
 

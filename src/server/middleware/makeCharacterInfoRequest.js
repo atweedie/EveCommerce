@@ -1,22 +1,24 @@
-import crypto from 'crypto';
 import logger from '../logger';
-import config from '../../../config/local';
-import getCharacterInfo from '../services/getCharacterInfo';
+import esiRequest from '../services/esiRequest';
 
 export default async function (request, response, next) {
-    const encryptedAccessToken = request.cookies['esi_atkn'];
 
-    const secret = config.secretKey;
-    
-    const accessTokenCipher = crypto.createDecipher('aes192', secret);
-    let accessToken = accessTokenCipher.update(encryptedAccessToken, 'hex', 'utf8');
-    accessToken += accessTokenCipher.final('utf8');
+    const characterId = response.locals['characterId'];
 
-    const esiCharacterInfo = await getCharacterInfo(accessToken);
+    const esiCharacterInfoPath = `/characters/${characterId}/`
+    const esiCharacterPortraitPath = `${esiCharacterInfoPath}portrait/`
 
-    response.locals.character = esiCharacterInfo.data;
+    try {
+        const characterInfo = await esiRequest(esiCharacterInfoPath);
 
-    logger.info(response.locals);
+        response.locals.characterInfo = characterInfo.data;
 
-    next();
+        const characterPortraits = await esiRequest(esiCharacterPortraitPath)
+
+        response.locals.portraits = characterPortraits.data;
+
+        next();
+    } catch (error) {
+        logger.error(error.response.data);
+    }
 }
