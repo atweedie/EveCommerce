@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+}
+
+.nav { 
+    grid-area: nav;
+    background-color: #000000;
+}
+
+.menu { 
+    grid-area: menu;
+    background-color: #262626;
+    color: #CBCBCB; 
+}
+
+.main { 
+    grid-area: main;
+    background-color: #595959;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'nav nav nav nav nav nav'
+        'menu main main main main main';
+    grid-template-columns: 10% auto;
+    grid-template-rows: 50px auto;
+    height: 100%;
+}
