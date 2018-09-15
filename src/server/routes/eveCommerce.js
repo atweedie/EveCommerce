@@ -1,10 +1,12 @@
 import express from 'express';
 import authCheck from '../middleware/authCheck';
-import makeEsiTokenRequest from '../middleware/makeEsiTokenRequest';
-import setEsiCookie from '../middleware/setEsiCookie';
+import getEsiTokens from '../middleware/getEsiTokens';
+import setTokenCookies from '../middleware/setTokenCookies';
 import redirectEveSso from '../middleware/redirectEveSso';
-import makeCharacterInfoRequest from '../middleware/makeCharacterInfoRequest'
+import getCharacterInfo from '../middleware/getCharacterInfo'
 import verifyAccessToken from '../middleware/verifyAccessToken';
+import getCorporationInfo from '../middleware/getCorporationInfo';
+import getBlueprintInfo from '../middleware/getBlueprintInfo';
 
 const router = express.Router();
 
@@ -12,7 +14,9 @@ router.get(
     '/',
     authCheck,
     verifyAccessToken,
-    makeCharacterInfoRequest,
+    getCharacterInfo,
+    getCorporationInfo,
+    getBlueprintInfo,
     function (request, response, next) {
         response.render('home');
     }
@@ -25,8 +29,8 @@ router.get(
 
 router.get(
     '/esi',
-    makeEsiTokenRequest,
-    setEsiCookie,
+    getEsiTokens,
+    setTokenCookies,
     function (request, response, next) {
         response.redirect('/');
     }

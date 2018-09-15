@@ -6,7 +6,10 @@ html
 .grid-container
     .nav
     .menu
-        p Welcome #{characterInfo.name}
         img(src=portraits.px128x128)
+        p #{characterInfo.name}
+        p #{corporationInfo.name}
+            img(src=icons.px64x64)
     .main
-
+        for each item in blueprints
+            p #{item.name}
